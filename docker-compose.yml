@@ -34,3 +34,8 @@ services:
     restart: always
     ports:
       - 3000:3000
+  result_auth:
+    image: stevencchang/result_login:v1
+    restart: always
+    ports:
+      - 3003:3003

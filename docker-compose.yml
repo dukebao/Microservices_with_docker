@@ -18,7 +18,7 @@ services:
   app:
     depends_on:
       - mysqldb
-    image: assignment1_input:v14
+    image: stevencchang/assignment1_input:v14
     env_file: ./.env
     restart: always
     ports:
@@ -29,3 +29,8 @@ services:
       MYSQL_PASSWORD: $MYSQL_PASSWORD
       MYSQL_DATABASE: $MYSQL_DATABASE
       MYSQL_PORT: $MYSQLDB_DOCKER_PORT
+  auth:
+    image: stevencchang/assignment1_login:v4
+    restart: always
+    ports:
+      - 3000:3000

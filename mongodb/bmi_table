@@ -1,0 +1,3 @@
+{"_id":{"$oid":"633df894474ec700072e6445"},"name":"alex","age":25,"gender":"male","bmi":22.5,"classification":"normal"}
+{"_id":{"$oid":"633df8c2474ec700072e6446"},"name":"steven","age":30,"gender":"male","bmi":25.5,"classification":"overweight"}
+{"_id":{"$oid":"633df8de474ec700072e6447"},"name":"gokce","age":30,"gender":"female","bmi":16.5,"classification":"underweight"}

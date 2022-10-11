@@ -1,5 +1,46 @@
+version: "3.8"
 services:
+  web:
+    container_name: node_app
+    build: ./app_code/
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=password
+        - MONGO_INITDB_DATABASE=bmi_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./app_code/mongodb/db:/data/db
+      - ./app_code/mongodb/dev.archive:/Databases/dev.archive
+      - ./app_code/mongodb/production:/Databases/production
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_URL=mongodb://root:password@mongo:27017/?authSource=admin
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin
+    depends_on:
+      - mongo
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+
   mysqldb:
+    container_name: mysqldb
     image: stevencchang/asgn1mysql:v1
     command: mysqld --default-authentication-plugin=mysql_native_password
     env_file: ./.env
@@ -15,7 +56,9 @@ services:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
       - ./db:/var/lib/mysql
+
   app:
+    container_name: input_app
     depends_on:
       - mysqldb
     image: stevencchang/assignment1_input:v14
@@ -29,7 +72,9 @@ services:
       MYSQL_PASSWORD: $MYSQL_PASSWORD
       MYSQL_DATABASE: $MYSQL_DATABASE
       MYSQL_PORT: $MYSQLDB_DOCKER_PORT
+
   auth:
+    container_name: auth_app
     image: stevencchang/assignment1_login:v4
     restart: always
     ports:

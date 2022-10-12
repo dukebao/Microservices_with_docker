@@ -12,21 +12,23 @@ services:
   mongo:
     image: mongo:latest
     container_name: mongo
+    restart: unless-stopped
+    networks: 
+      - mongo-compose-network
     environment:
         - MONGO_INITDB_ROOT_USERNAME=root
         - MONGO_INITDB_ROOT_PASSWORD=password
         - MONGO_INITDB_DATABASE=bmi_mongo
-    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
       - ./app_code/mongodb/db:/data/db
-      - ./app_code/mongodb/dev.archive:/Databases/dev.archive
-      - ./app_code/mongodb/production:/Databases/production
 
   mongo-express:
     image: mongo-express
     container_name: mongo-express
+    networks: 
+      - mongo-compose-network
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=root
       - ME_CONFIG_MONGODB_ADMINPASSWORD=password
@@ -85,3 +87,7 @@ services:
     restart: always
     ports:
       - 3003:3003
+
+networks:
+  mongo-compose-network:
+    driver: bridge

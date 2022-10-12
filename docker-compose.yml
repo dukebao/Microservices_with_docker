@@ -55,6 +55,7 @@ services:
     ports:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
+      - ./mysqldb:/docker-entrypoint-initdb.d
       - ./db:/var/lib/mysql
 
   app:
